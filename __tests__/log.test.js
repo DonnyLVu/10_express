@@ -96,4 +96,64 @@ describe('log tests', () => {
 
     expect(res.body).toEqual(log);
   });
+
+  it('Update logs', async () => {
+    const recipe = await Recipe.insert({
+      name: 'cookies',
+      directions: [
+        'preheat oven to 375',
+        'mix ingredients',
+        'put dough on cookie sheet',
+        'bake for 10 minutes'
+      ],
+    });
+
+    const log = await Log.insert({
+      recipeId: recipe.id,
+      dateOfEvent: 'TomorrowisntAint',
+      notes: 'Note for update logs by id',
+      rating: 4
+    });
+
+    const res = await request(app)
+      .put(`/api/v1/logs/${log.id}`)
+      .send({
+        recipeId: recipe.id,
+        dateOfEvent: 'TomorrowisntAintIs',
+        notes: 'Note for update logs by id two',
+        rating: 8
+      });
+
+    expect(res.body).toEqual({
+      id: '1',
+      recipeId: recipe.id,
+      dateOfEvent: 'TomorrowisntAintIs',
+      notes: 'Note for update logs by id two',
+      rating: 8
+    });
+  });
+
+  it('Delete a log', async () => {
+    const recipe = await Recipe.insert({
+      name: 'cookies',
+      directions: [
+        'preheat oven to 375',
+        'mix ingredients',
+        'put dough on cookie sheet',
+        'bake for 10 minutes'
+      ],
+    });
+
+    const log = await Log.insert({
+      recipeId: recipe.id,
+      dateOfEvent: 'TomorrowisntAintIs',
+      notes: 'Note for update logs by id',
+      rating: 8
+    });
+
+    const res = await request(app)
+      .delete(`/api/v1/logs/${log.id}`);
+
+    expect(res.body).toEqual(log);
+  });
 });
