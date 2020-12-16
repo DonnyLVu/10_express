@@ -72,4 +72,28 @@ describe('log tests', () => {
       rating: 5
     }]);
   });
+
+  it('Get log by using get id', async () => {
+    const recipe = await Recipe.insert({
+      name: 'cookies',
+      directions: [
+        'preheat oven to 375',
+        'mix ingredients',
+        'put dough on cookie sheet',
+        'bake for 10 minutes'
+      ],
+    });
+
+    const log = await Log.insert({
+      recipeId: recipe.id,
+      dateOfEvent: 'Tomorrowisnt',
+      notes: 'Note for get logs by id',
+      rating: 9
+    });
+
+    const res = await request(app)
+      .get(`/api/v1/logs/${log.id}`);
+
+    expect(res.body).toEqual(log);
+  });
 });
