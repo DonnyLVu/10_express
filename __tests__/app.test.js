@@ -18,6 +18,11 @@ describe('recipe-lab routes', () => {
       .post('/api/v1/recipes')
       .send({
         name: 'cookies',
+        ingredients: [
+          { amount: '123' },
+          { measurements: 'Gallons' },
+          { name: 'flour' }
+        ],
         directions: [
           'preheat oven to 375',
           'mix ingredients',
@@ -29,6 +34,11 @@ describe('recipe-lab routes', () => {
         expect(res.body).toEqual({
           id: expect.any(String),
           name: 'cookies',
+          ingredients: [
+            { amount: '123' },
+            { measurements: 'Gallons' },
+            { name: 'flour' }
+          ],
           directions: [
             'preheat oven to 375',
             'mix ingredients',
@@ -41,9 +51,27 @@ describe('recipe-lab routes', () => {
 
   it('gets all recipes', async () => {
     const recipes = await Promise.all([
-      { name: 'cookies', directions: [] },
-      { name: 'cake', directions: [] },
-      { name: 'pie', directions: [] }
+      {
+        name: 'cookies', directions: [], ingredients: [
+          { amount: '555' },
+          { measurements: 'Pints' },
+          { name: 'Salt' }
+        ],
+      },
+      {
+        name: 'cake', directions: [], ingredients: [
+          { amount: '999' },
+          { measurements: 'oz' },
+          { name: 'water' }
+        ],
+      },
+      {
+        name: 'pie', directions: [], ingredients: [
+          { amount: '777' },
+          { measurements: 'grams' },
+          { name: 'meat' }
+        ],
+      }
     ].map(recipe => Recipe.insert(recipe)));
 
     return request(app)
@@ -58,6 +86,11 @@ describe('recipe-lab routes', () => {
   it('gets by id for recipes', async () => {
     const recipe = await Recipe.insert({
       name: 'cookies',
+      ingredients: [
+        { amount: '100000' },
+        { measurements: 'Tons' },
+        { name: 'gummy bears' }
+      ],
       directions: [
         'preheat oven to 375',
         'mix ingredients',
@@ -71,6 +104,11 @@ describe('recipe-lab routes', () => {
     expect(res.body).toEqual({
       id: expect.any(String),
       name: 'cookies',
+      ingredients: [
+        { amount: '100000' },
+        { measurements: 'Tons' },
+        { name: 'gummy bears' }
+      ],
       directions: [
         'preheat oven to 375',
         'mix ingredients',
@@ -83,6 +121,11 @@ describe('recipe-lab routes', () => {
   it('updates a recipe by id', async () => {
     const recipe = await Recipe.insert({
       name: 'cookies',
+      ingredients: [
+        { amount: '4' },
+        { measurements: 'suns' },
+        { name: 'earths' }
+      ],
       directions: [
         'preheat oven to 375',
         'mix ingredients',
@@ -95,6 +138,11 @@ describe('recipe-lab routes', () => {
       .put(`/api/v1/recipes/${recipe.id}`)
       .send({
         name: 'good cookies',
+        ingredients: [
+          { amount: '864123451616112312' },
+          { measurements: 'freedom units' },
+          { name: 'football fields' }
+        ],
         directions: [
           'preheat oven to 375',
           'mix ingredients',
@@ -104,8 +152,13 @@ describe('recipe-lab routes', () => {
       })
       .then(res => {
         expect(res.body).toEqual({
-          id: expect.any(String),
+          id: '1',
           name: 'good cookies',
+          ingredients: [
+            { amount: '864123451616112312' },
+            { measurements: 'freedom units' },
+            { name: 'football fields' }
+          ],
           directions: [
             'preheat oven to 375',
             'mix ingredients',
@@ -119,6 +172,11 @@ describe('recipe-lab routes', () => {
   it('delete a recipe by id', async () => {
     const recipe = await Recipe.insert({
       name: 'cookies',
+      ingredients: [
+        { amount: '1' },
+        { measurements: 'black hole sized' },
+        { name: 'duck' }
+      ],
       directions: [
         'preheat oven to 375',
         'mix ingredients',
@@ -133,6 +191,11 @@ describe('recipe-lab routes', () => {
     expect(res.body).toEqual({
       id: expect.any(String),
       name: 'cookies',
+      ingredients: [
+        { amount: '1' },
+        { measurements: 'black hole sized' },
+        { name: 'duck' }
+      ],
       directions: [
         'preheat oven to 375',
         'mix ingredients',
